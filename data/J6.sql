@@ -1,1 +1,0 @@
-INSERT INTO Demande_pub(id) VALUES(1,)
