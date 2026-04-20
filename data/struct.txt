@@ -1,0 +1,84 @@
+situation_familiale:
+    libelle
+
+nationalite
+    libelle
+
+demandeur:
+    nom !
+    prenom
+    date_naissance !
+    id_nationalite
+    id_situation_familiale
+    adresse_mada !
+    contact !
+    email
+    created_at
+
+visa_transformable
+    id_passeport
+    numero
+    date_entree_territoire
+    lieu_entree_territoire
+    numero_visa_transformable
+    date_sortie_territoire
+
+passeport:
+    numero
+    id_demandeur
+    date_delivrance
+    date_expiration
+
+type_visa:
+    code
+    libelle
+
+piece_justificative:
+    code
+    libelle
+    commun(yes/no)
+    obligatoire(yes/no)
+
+piece_specifique_type_visa:
+    id_type_visa
+    id_piece_justificative
+
+demande_piece:
+    id_demande
+    id_piece
+
+statut_demande:
+    libelle
+    code
+
+type_demande(renouvellement/duplicata/transformation):
+    libelle
+    code
+
+demande:
+    id_visa_transformable
+    id_statut(last)/valeur_statut(int)
+    date_demande
+    id_type_visa
+    id_type_demande
+
+
+historique_statut_demande:
+    id_demande
+    id_administrateur
+    date_update
+    id_statut_demande
+
+visa
+    date_delivrence
+    date_debut
+    date_fin
+    numero_visa
+    id_demande
+
+carte_resident
+    date_delivrence
+    date_debut
+    date_fin
+    numero_carte_resident
+    id_demande
