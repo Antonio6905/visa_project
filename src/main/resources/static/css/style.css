@@ -1,4 +1,4 @@
-/* Style personnalisé pour l'application cinéma */
+/* Style personnalisé pour l'application visa */
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -12,13 +12,13 @@ body {
 }
 
 /* Cards */
-.cinema-card {
+.visa-card {
     transition: transform 0.3s ease;
     border: none;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.cinema-card:hover {
+.visa-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
@@ -29,7 +29,7 @@ body {
 }
 
 /* Boutons */
-.btn-cinema {
+.btn-visa {
     background-color: #0d6efd;
     color: white;
     border-radius: 20px;
@@ -37,13 +37,13 @@ body {
     transition: all 0.3s ease;
 }
 
-.btn-cinema:hover {
+.btn-visa:hover {
     background-color: #0b5ed7;
     transform: scale(1.05);
 }
 
 /* Badges */
-.badge-cinema {
+.badge-visa {
     background-color: #6f42c1;
     color: white;
 }
@@ -55,7 +55,7 @@ body {
 }
 
 /* Alertes */
-.alert-cinema {
+.alert-visa {
     border-left: 4px solid #0d6efd;
 }
 
@@ -71,7 +71,7 @@ body {
         margin-top: 10px;
     }
 
-    .cinema-card {
+    .visa-card {
         margin-bottom: 15px;
     }
 }

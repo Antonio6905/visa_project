@@ -1,0 +1,7 @@
+Le contexte est la gestion de demande de visa.
+On a plusieurs type de demande : nouveau titre, duplicata, transformation.
+Notre premier but consiste à implémenter un formulaire pour une demande nouveau titre.
+Les demandes ont aussi des statuts : créé, traité, scanné.
+Nous avons des champs obligatoires (indiqués par '!' dans struct.txt).
+Pour les pièces justificatives, on a des pièces communes et spécifiques au type de visa. Les spécifiques seront dynamiques par rapport au type de visa choisi. Les pieces fournies sont en checkbox et on enregistre ceux qui sont cochés.
+Pour valider le formulaire, il faut que tous les champs obligatoires soient remplis. Pour l'instant, le statut sera juste 'créé'.

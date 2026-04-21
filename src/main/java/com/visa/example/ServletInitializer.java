@@ -1,4 +1,4 @@
-package com.cinema.example;
+package com.visa.example;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;

@@ -3,14 +3,14 @@
     String pageTitle = (String) request.getAttribute("pageTitle");
     String pageIcon = (String) request.getAttribute("pageIcon");
 
-    if (pageTitle == null) pageTitle = "Gestion Cinéma";
+    if (pageTitle == null) pageTitle = "Gestion visa";
 %>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= pageTitle %> - Gestion Cinéma</title>
+    <title><%= pageTitle %> - Gestion visa</title>
 
     <!-- Bootstrap 5 CSS CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -51,7 +51,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container">
         <a class="navbar-brand" href="/">
-            <i class="bi bi-camera-reels me-2"></i>Gestion Cinéma
+            <i class="bi bi-camera-reels me-2"></i>Gestion visa
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
@@ -61,6 +61,11 @@
                 <li class="nav-item">
                     <a class="nav-link active" href="/">
                         <i class="bi bi-house me-1"></i>Accueil
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="${pageContext.request.contextPath}/demandes/nouveau-titre">
+                        <i class="bi bi-file-earmark-plus me-1"></i>Demande Nouveau Titre
                     </a>
                 </li>
                 <li class="nav-item">

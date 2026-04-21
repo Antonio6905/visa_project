@@ -1,4 +1,4 @@
-package com.cinema.example;
+package com.visa.example;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
