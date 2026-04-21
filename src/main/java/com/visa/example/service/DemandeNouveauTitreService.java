@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Date;
 import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -84,6 +85,46 @@ public class DemandeNouveauTitreService {
 
     public List<TypeVisa> getTypeVisas() {
         return typeVisaRepository.findAll();
+    }
+
+    public List<Demande> getAllDemandes() {
+        List<Demande> demandes = new ArrayList<>(demandeRepository.findAll());
+        demandes.sort(
+                Comparator.comparing(Demande::getDateDemande, Comparator.nullsLast(Comparator.naturalOrder()))
+                        .reversed()
+        );
+        return demandes;
+    }
+
+    public Demande getDemandeByIdOrThrow(Long demandeId) {
+        return demandeRepository.findById(demandeId)
+                .orElseThrow(() -> new IllegalArgumentException("Demande introuvable."));
+    }
+
+    public List<PieceJustificative> getPiecesParDemande(Long demandeId) {
+        List<DemandePiece> demandePieces = demandePieceRepository.findByDemandeId(demandeId);
+        List<PieceJustificative> pieces = new ArrayList<>();
+        for (DemandePiece demandePiece : demandePieces) {
+            if (demandePiece.getPiece() != null) {
+                pieces.add(demandePiece.getPiece());
+            }
+        }
+        return pieces;
+    }
+
+    public List<Long> getPieceIdsParDemande(Long demandeId) {
+        List<DemandePiece> demandePieces = demandePieceRepository.findByDemandeId(demandeId);
+        List<Long> ids = new ArrayList<>();
+        for (DemandePiece demandePiece : demandePieces) {
+            if (demandePiece.getPiece() != null && demandePiece.getPiece().getId() != null) {
+                ids.add(demandePiece.getPiece().getId());
+            }
+        }
+        return ids;
+    }
+
+    public List<PieceJustificative> getPiecesAutoriseesParTypeVisa(Long typeVisaId) {
+        return getPiecesAutorisees(typeVisaId);
     }
 
     public List<Nationalite> getNationalites() {
@@ -165,6 +206,25 @@ public class DemandeNouveauTitreService {
         Demande demandeSauvegardee = demandeRepository.save(demande);
 
         savePiecesSelectionnees(demandeSauvegardee, typeVisa.getId(), form.getPieceIds());
+
+        return demandeSauvegardee;
+    }
+
+    @Transactional
+    public Demande modifierDemande(Long demandeId, Long typeVisaId, List<Long> pieceIds) {
+        Demande demande = getDemandeByIdOrThrow(demandeId);
+        TypeVisa typeVisa = typeVisaRepository.findById(typeVisaId)
+                .orElseThrow(() -> new IllegalArgumentException("Type de visa introuvable."));
+
+        demande.setTypeVisa(typeVisa);
+        Demande demandeSauvegardee = demandeRepository.save(demande);
+
+        List<DemandePiece> existantes = demandePieceRepository.findByDemandeId(demandeId);
+        if (!existantes.isEmpty()) {
+            demandePieceRepository.deleteAll(existantes);
+        }
+
+        savePiecesSelectionnees(demandeSauvegardee, typeVisa.getId(), pieceIds);
 
         return demandeSauvegardee;
     }

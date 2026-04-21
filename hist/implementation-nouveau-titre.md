@@ -115,3 +115,65 @@ Resultat:
 - Pour statut cree, le service essaie les codes:
   - `CREE`, `CREATED`, `CREATION`, `NOUVEAU`.
 - Si aucun code/libelle correspondant n'existe en base, le service renvoie une erreur explicite.
+
+## Ajout 2 - Liste, detail et modification des demandes
+
+Date: 2026-04-21
+
+### Objectif couvert
+
+- afficher la liste de toutes les demandes
+- fournir un lien pour voir les details d'une demande
+- fournir un lien pour modifier une demande
+
+### Backend ajoute
+
+- Nouveau DTO edition:
+  - src/main/java/com/visa/example/dto/DemandeEditForm.java
+
+- Nouvelles capacites service:
+  - src/main/java/com/visa/example/service/DemandeNouveauTitreService.java
+  - recuperation de toutes les demandes
+  - recuperation d'une demande par id
+  - recuperation des pieces d'une demande
+  - modification de la demande (type visa + pieces)
+
+- Nouvelles routes controleur:
+  - src/main/java/com/visa/example/controller/DemandeNouveauTitreController.java
+  - `GET /demandes` -> liste
+  - `GET /demandes/{id}` -> detail
+  - `GET /demandes/{id}/edit` -> formulaire de modification
+  - `POST /demandes/{id}/edit` -> sauvegarde des modifications
+
+### Vues ajoutees
+
+- src/main/webapp/WEB-INF/views/demandes/list.jsp
+  - tableau des demandes
+  - bouton voir details
+  - bouton modifier
+
+- src/main/webapp/WEB-INF/views/demandes/detail.jsp
+  - informations principales de la demande
+  - liste des pieces associees
+  - bouton de modification
+
+- src/main/webapp/WEB-INF/views/demandes/edit.jsp
+  - modification du type de visa
+  - modification des pieces communes/specifiques
+  - pieces specifiques dynamiques via le JS existant
+
+### Navigation
+
+- header mis a jour:
+  - src/main/webapp/WEB-INF/views/includes/header.jsp
+  - lien ajoute vers `/demandes`
+
+### Ajustement build
+
+- pom.xml mis a jour pour exclure de la compilation le dossier legacy suivant, qui contenait des doublons casses:
+  - src/main/java/entity/**
+
+### Verification
+
+- Compilation validee avec:
+  - `./mvnw.cmd -DskipTests compile`
