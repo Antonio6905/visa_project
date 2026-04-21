@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.cinema.example.ExampleApplicationTests
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 8.841 s -- in com.cinema.example.ExampleApplicationTests
