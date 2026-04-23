@@ -6,9 +6,9 @@ INSERT INTO situation_familiale (id, libelle) VALUES
 
 INSERT INTO nationalite (id, libelle) VALUES
 (1, 'Malagasy'),
-(2, 'Française'),
-(3, 'Mauricienne'),
-(4, 'Chinoise');
+(2, 'Francais'),
+(3, 'Mauricien'),
+(4, 'Chinois');
 
 INSERT INTO type_visa (id, code, libelle) VALUES
 (1, 'TS', 'Travail'),
@@ -20,10 +20,11 @@ INSERT INTO type_demande (id, code, libelle) VALUES
 (3, 'TRF', 'Transformation');
 
 INSERT INTO statut_demande (id, code, libelle) VALUES
-(1, 'EN_ATTENTE', 'En attente'),
+(1, 'CREE', 'En attente'),
 (2, 'EN_COURS', 'En cours de traitement'),
 (3, 'VALIDE', 'Validée'),
-(4, 'REFUSE', 'Refusée');
+(4, 'REFUSE', 'Refusée'),
+(5, 'SCAN', 'Scan termine');
 
 INSERT INTO piece_justificative (id, code, libelle, commun, obligatoire) VALUES
 (1, 'PASS', 'Copie du passeport', TRUE, TRUE),

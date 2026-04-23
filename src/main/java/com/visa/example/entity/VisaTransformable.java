@@ -27,9 +27,6 @@ public class VisaTransformable implements Serializable {
     @Column(name = "lieu_entree_territoire", length = 200, nullable = false)
     private String lieuEntreeTerritoire;
     
-    @Column(name = "numero_visa_transformable", length = 50, nullable = false)
-    private String numeroVisaTransformable;
-    
     @Column(name = "date_sortie_territoire")
     @Temporal(TemporalType.DATE)
     private Date dateSortieTerritoire;
@@ -76,13 +73,6 @@ public class VisaTransformable implements Serializable {
         this.lieuEntreeTerritoire = lieuEntreeTerritoire;
     }
     
-    public String getNumeroVisaTransformable() {
-        return numeroVisaTransformable;
-    }
-    
-    public void setNumeroVisaTransformable(String numeroVisaTransformable) {
-        this.numeroVisaTransformable = numeroVisaTransformable;
-    }
     
     public Date getDateSortieTerritoire() {
         return dateSortieTerritoire;

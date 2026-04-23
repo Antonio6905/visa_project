@@ -47,6 +47,21 @@ public class NouveauTitreForm {
 
     private List<Long> pieceIds = new ArrayList<>();
 
+    // --- Visa Transformable ---
+
+    @NotBlank(message = "Le numero du visa transformable est obligatoire")
+    private String numeroVisaTransformable;
+
+    @NotNull(message = "La date d'entree sur le territoire est obligatoire")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate dateEntreeTerritoire;
+
+    @NotBlank(message = "Le lieu d'entree sur le territoire est obligatoire")
+    private String lieuEntreeTerritoire;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate dateSortieTerritoire;
+
     public String getNom() {
         return nom;
     }
@@ -149,5 +164,39 @@ public class NouveauTitreForm {
 
     public void setPieceIds(List<Long> pieceIds) {
         this.pieceIds = pieceIds;
+    }
+
+    public String getNumeroVisaTransformable() {
+        return numeroVisaTransformable;
+    }
+
+    public void setNumeroVisaTransformable(String numeroVisaTransformable) {
+        this.numeroVisaTransformable = numeroVisaTransformable;
+    }
+
+    public LocalDate getDateEntreeTerritoire() {
+        return dateEntreeTerritoire;
+    }
+
+    public void setDateEntreeTerritoire(LocalDate dateEntreeTerritoire) {
+        this.dateEntreeTerritoire = dateEntreeTerritoire;
+    }
+
+    public String getLieuEntreeTerritoire() {
+        return lieuEntreeTerritoire;
+    }
+
+    public void setLieuEntreeTerritoire(String lieuEntreeTerritoire) {
+        this.lieuEntreeTerritoire = lieuEntreeTerritoire;
+    }
+
+
+
+    public LocalDate getDateSortieTerritoire() {
+        return dateSortieTerritoire;
+    }
+
+    public void setDateSortieTerritoire(LocalDate dateSortieTerritoire) {
+        this.dateSortieTerritoire = dateSortieTerritoire;
     }
 }

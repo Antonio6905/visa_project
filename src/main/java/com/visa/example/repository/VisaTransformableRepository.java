@@ -11,5 +11,4 @@ public interface VisaTransformableRepository extends JpaRepository<VisaTransform
     
     List<VisaTransformable> findByPasseportId(Long passeportId);
     
-    VisaTransformable findByNumeroVisaTransformable(String numeroVisaTransformable);
 }

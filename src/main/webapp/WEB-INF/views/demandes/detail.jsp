@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.visa.example.entity.Demande" %>
 <%@ page import="com.visa.example.entity.PieceJustificative" %>
+<%@ page import="com.visa.example.entity.VisaTransformable" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.Collections" %>
 <%@ page import="java.util.List" %>
@@ -11,8 +12,10 @@
     if (pieces == null) {
         pieces = Collections.emptyList();
     }
+    VisaTransformable visaTransfo = demande.getVisaTransformable();
 
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+    SimpleDateFormat sdfDate = new SimpleDateFormat("dd/MM/yyyy");
 %>
 
 <div class="card shadow-sm border-0">
@@ -41,11 +44,37 @@
                 <strong>Type visa:</strong><br>
                 <%= demande.getTypeVisa() != null ? demande.getTypeVisa().getLibelle() : "-" %>
             </div>
-            <div class="col-md-6">
-                <strong>Visa transformable:</strong><br>
-                <%= demande.getVisaTransformable() != null ? demande.getVisaTransformable().getNumeroVisaTransformable() : "-" %>
-            </div>
         </div>
+
+        <hr>
+
+        <h5>Visa(s) Transformable(s)</h5>
+        <% if (visaTransfo==null) { %>
+            <div class="alert alert-secondary">Aucun visa transformable associe.</div>
+        <% } else { %>
+            <div class="card border mb-2">
+                <div class="card-body py-2">
+                    <div class="row g-2">
+                        <div class="col-md-4">
+                            <strong>Numero (visa):</strong><br>
+                            <%= visaTransfo.getNumero() != null ? visaTransfo.getNumero() : "-" %>
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Lieu d'entree:</strong><br>
+                            <%= visaTransfo.getLieuEntreeTerritoire() != null ? visaTransfo.getLieuEntreeTerritoire() : "-" %>
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Date d'entree:</strong><br>
+                            <%= visaTransfo.getDateEntreeTerritoire() != null ? sdfDate.format(visaTransfo.getDateEntreeTerritoire()) : "-" %>
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Date de sortie:</strong><br>
+                            <%= visaTransfo.getDateSortieTerritoire() != null ? sdfDate.format(visaTransfo.getDateSortieTerritoire()) : "-" %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% } %>
 
         <hr>
 

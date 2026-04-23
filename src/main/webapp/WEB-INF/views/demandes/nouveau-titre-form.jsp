@@ -157,6 +157,38 @@
                 </div>
 
                 <div class="col-12 mt-4">
+                    <h5 class="text-primary">Informations Visa Transformable</h5>
+                    <p class="text-muted small">Informations relatives au visa en cours de transformation.</p>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Numero du visa transformable *</label>
+                    <input type="text" class="form-control" name="numeroVisaTransformable"
+                           value="<%= form.getNumeroVisaTransformable() != null ? form.getNumeroVisaTransformable() : "" %>"
+                           required maxlength="50">
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Date d'entree sur le territoire *</label>
+                    <input type="date" class="form-control" name="dateEntreeTerritoire"
+                           value="<%= form.getDateEntreeTerritoire() != null ? form.getDateEntreeTerritoire().toString() : "" %>"
+                           required>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Lieu d'entree sur le territoire *</label>
+                    <input type="text" class="form-control" name="lieuEntreeTerritoire"
+                           value="<%= form.getLieuEntreeTerritoire() != null ? form.getLieuEntreeTerritoire() : "" %>"
+                           required maxlength="200">
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Date de sortie du territoire</label>
+                    <input type="date" class="form-control" name="dateSortieTerritoire"
+                           value="<%= form.getDateSortieTerritoire() != null ? form.getDateSortieTerritoire().toString() : "" %>">
+                </div>
+
+                <div class="col-12 mt-4">
                     <h5 class="text-primary">Visa et Pieces Justificatives</h5>
                 </div>
 

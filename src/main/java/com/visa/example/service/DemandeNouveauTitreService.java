@@ -23,6 +23,8 @@ import com.visa.example.repository.SituationFamilialeRepository;
 import com.visa.example.repository.StatutDemandeRepository;
 import com.visa.example.repository.TypeDemandeRepository;
 import com.visa.example.repository.TypeVisaRepository;
+import com.visa.example.entity.VisaTransformable;
+import com.visa.example.repository.VisaTransformableRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,8 +44,8 @@ import java.util.Set;
 @Service
 public class DemandeNouveauTitreService {
 
-    private static final List<String> TYPE_DEMANDE_CODES = List.of("NOUVEAU_TITRE", "NOUVEAU", "RENOUVELLEMENT");
-    private static final List<String> STATUT_CODES = List.of("CREE", "CREATED", "CREATION", "NOUVEAU");
+    private static final List<String> TYPE_DEMANDE_CODES = List.of("NT", "DUP", "TRF");
+    private static final List<String> STATUT_CODES = List.of("CREE", "EN_COURS", "VALIDE", "REFUSE","SCAN");
 
     private final DemandeRepository demandeRepository;
     private final DemandeurRepository demandeurRepository;
@@ -56,6 +58,7 @@ public class DemandeNouveauTitreService {
     private final PieceJustificativeRepository pieceJustificativeRepository;
     private final PieceSpecifiqueTypeVisaRepository pieceSpecifiqueTypeVisaRepository;
     private final DemandePieceRepository demandePieceRepository;
+    private final VisaTransformableRepository visaTransformableRepository;
 
     public DemandeNouveauTitreService(
             DemandeRepository demandeRepository,
@@ -68,7 +71,8 @@ public class DemandeNouveauTitreService {
             SituationFamilialeRepository situationFamilialeRepository,
             PieceJustificativeRepository pieceJustificativeRepository,
             PieceSpecifiqueTypeVisaRepository pieceSpecifiqueTypeVisaRepository,
-            DemandePieceRepository demandePieceRepository
+            DemandePieceRepository demandePieceRepository,
+            VisaTransformableRepository visaTransformableRepository
     ) {
         this.demandeRepository = demandeRepository;
         this.demandeurRepository = demandeurRepository;
@@ -81,6 +85,7 @@ public class DemandeNouveauTitreService {
         this.pieceJustificativeRepository = pieceJustificativeRepository;
         this.pieceSpecifiqueTypeVisaRepository = pieceSpecifiqueTypeVisaRepository;
         this.demandePieceRepository = demandePieceRepository;
+        this.visaTransformableRepository = visaTransformableRepository;
     }
 
     public List<TypeVisa> getTypeVisas() {
@@ -94,6 +99,10 @@ public class DemandeNouveauTitreService {
                         .reversed()
         );
         return demandes;
+    }
+
+    public List<VisaTransformable> getVisaTransformablesParPasseport(Long passeportId) {
+        return visaTransformableRepository.findByPasseportId(passeportId);
     }
 
     public Demande getDemandeByIdOrThrow(Long demandeId) {
@@ -197,12 +206,23 @@ public class DemandeNouveauTitreService {
         passeport.setDemandeur(demandeurSauvegarde);
         passeport.setDateDelivrance(toSqlDate(form.getDateDelivrancePasseport()));
         passeport.setDateExpiration(toSqlDate(form.getDateExpirationPasseport()));
-        passeportRepository.save(passeport);
+        Passeport passeportSauvegarde = passeportRepository.save(passeport);
+
+        VisaTransformable visaTransformable = new VisaTransformable();
+        visaTransformable.setPasseport(passeportSauvegarde);
+        visaTransformable.setNumero(form.getNumeroVisaTransformable().trim());
+        visaTransformable.setDateEntreeTerritoire(toSqlDate(form.getDateEntreeTerritoire()));
+        visaTransformable.setLieuEntreeTerritoire(form.getLieuEntreeTerritoire().trim());
+        if (form.getDateSortieTerritoire() != null) {
+            visaTransformable.setDateSortieTerritoire(toSqlDate(form.getDateSortieTerritoire()));
+        }
+        visaTransformableRepository.save(visaTransformable);
 
         Demande demande = new Demande();
         demande.setTypeVisa(typeVisa);
         demande.setTypeDemande(typeDemande);
         demande.setStatut(statutCree);
+        demande.setVisaTransformable(visaTransformable);
         Demande demandeSauvegardee = demandeRepository.save(demande);
 
         savePiecesSelectionnees(demandeSauvegardee, typeVisa.getId(), form.getPieceIds());

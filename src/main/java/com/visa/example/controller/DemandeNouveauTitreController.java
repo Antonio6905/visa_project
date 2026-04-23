@@ -4,6 +4,7 @@ import com.visa.example.dto.DemandeEditForm;
 import com.visa.example.dto.NouveauTitreForm;
 import com.visa.example.entity.Demande;
 import com.visa.example.entity.PieceJustificative;
+import com.visa.example.entity.VisaTransformable;
 import com.visa.example.service.DemandeNouveauTitreService;
 import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
@@ -49,6 +50,7 @@ public class DemandeNouveauTitreController {
             model.addAttribute("content", "demandes/detail.jsp");
             model.addAttribute("demande", demande);
             model.addAttribute("pieces", demandeNouveauTitreService.getPiecesParDemande(demandeId));
+
             return "layout";
         } catch (IllegalArgumentException ex) {
             redirectAttributes.addFlashAttribute("error", ex.getMessage());
