@@ -73,70 +73,13 @@
                         <i class="bi bi-list-ul me-1"></i>Liste Demandes
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="${pageContext.request.contextPath}/dashboard/publicite">
-                        <i class="fas fa-chart-bar"></i> Dashboard Pub
-                    </a>
-                </li>
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="filmsDropdown" role="button"
-                       data-bs-toggle="dropdown">
-                        <i class="bi bi-film me-1"></i>Films
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="/films">Liste des films</a></li>
-                        <li><a class="dropdown-item" href="/films/new">Nouveau film</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="/genres">Genres</a></li>
-                        <li><a class="dropdown-item" href="/acteurs">Acteurs</a></li>
-                    </ul>
-                </li>
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="seancesDropdown" role="button"
-                       data-bs-toggle="dropdown">
-                        <i class="bi bi-calendar-event me-1"></i>Séances
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="/seances">Séances programmées</a></li>
-                        <li><a class="dropdown-item" href="/seances/new">Nouvelle séance</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="/salles">Salles</a></li>
-                    </ul>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="/billets">
-                        <i class="bi bi-ticket me-1"></i>Vente de billets
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="/salles">
-                        <i class="bi bi-ticket me-1"></i>Les salles
-                    </a>
-                </li>
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button"
-                       data-bs-toggle="dropdown">
-                        <i class="bi bi-gear me-1"></i>Administration
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="/salles">Salles</a></li>
-                        <li><a class="dropdown-item" href="/clients">Clients</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="/statistiques">Statistiques</a></li>
-                    </ul>
-                </li>
             </ul>
 
             <form class="d-flex" action="/search" method="get">
                 <input class="form-control me-2" type="search" name="q" placeholder="Rechercher...">
                 <button class="btn btn-outline-light" type="submit">
                     <i class="bi bi-search"></i>
-                </button>
+                </button>a
             </form>
         </div>
     </div>

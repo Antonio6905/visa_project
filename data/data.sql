@@ -11,12 +11,11 @@ INSERT INTO nationalite (id, libelle) VALUES
 (4, 'Chinoise');
 
 INSERT INTO type_visa (id, code, libelle) VALUES
-(1, 'TS', 'Travail salarié'),
-(2, 'ETU', 'Étudiant'),
-(3, 'INV', 'Investisseur');
+(1, 'TS', 'Travail'),
+(2, 'INV', 'Investisseur');
 
 INSERT INTO type_demande (id, code, libelle) VALUES
-(1, 'REN', 'Renouvellement'),
+(1, 'NT', 'Nouveau titre'),
 (2, 'DUP', 'Duplicata'),
 (3, 'TRF', 'Transformation');
 
@@ -31,11 +30,13 @@ INSERT INTO piece_justificative (id, code, libelle, commun, obligatoire) VALUES
 (2, 'PHOTO', 'Photo d''identité', TRUE, TRUE),
 (3, 'DOM', 'Justificatif de domicile', TRUE, FALSE),
 (4, 'TRAV', 'Contrat de travail', FALSE, TRUE),
-(5, 'CERT', 'Certificat de scolarité', FALSE, TRUE);
+(5, 'CI', 'Contrat investisseur', FALSE, TRUE);
 
-INSERT INTO piece_specifique_type_visa VALUES
-(1, 4), -- Travail → contrat
-(2, 5); -- Étudiant → certificat
+-- Travail → contrat
+-- Investisseur → Contrat
+INSERT INTO piece_specifique_type_visa(id_type_visa,id_piece_justificative) VALUES
+(1, 4), 
+(2, 5); 
 
 INSERT INTO demandeur 
 (id, nom, prenom, date_naissance, id_nationalite, id_situation_familiale, adresse_mada, contact, email)
