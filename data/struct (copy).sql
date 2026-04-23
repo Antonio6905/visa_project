@@ -1,7 +1,11 @@
 -- Création des tables
 
 -- reset table
-TRUNCATE TABLE carte_resident,demande_piece,demande,visa_transformable,passeport,demandeur RESTART IDENTITY;
+DELETE FROM demande_piece;
+DELETE FROM demande;
+DELETE FROM visa_transformable;
+DELETE FROM passeport;
+DELETE FROM demandeur;
 
 CREATE TABLE situation_familiale (
     id SERIAL PRIMARY KEY,

@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.visa.example.entity.Demande" %>
+<%@ page import="com.visa.example.entity.Demandeur" %>
 <%@ page import="com.visa.example.entity.PieceJustificative" %>
 <%@ page import="com.visa.example.entity.VisaTransformable" %>
 <%@ page import="java.text.SimpleDateFormat" %>
@@ -13,6 +14,7 @@
         pieces = Collections.emptyList();
     }
     VisaTransformable visaTransfo = demande.getVisaTransformable();
+    Demandeur demandeur = visaTransfo.getPasseport().getDemandeur();
 
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
     SimpleDateFormat sdfDate = new SimpleDateFormat("dd/MM/yyyy");
@@ -45,6 +47,39 @@
                 <%= demande.getTypeVisa() != null ? demande.getTypeVisa().getLibelle() : "-" %>
             </div>
         </div>
+
+        <hr>
+
+        <h5>Informations sur le demandeur</h5>
+        <% if (demandeur==null) { %>
+            <div class="alert alert-secondary">Aucune informations disponibles .</div>
+            <% } else { %>
+                <div class="card border mb-2">
+                    <div class="card-body py-2">
+                        <div class="row g-2">
+                            <div class="col-md-4">
+                                <strong>Nom:</strong><br>
+                                <%= demandeur.getNom() !=null ? demandeur.getNom() : "-" %>
+                            </div>
+                            <div class="col-md-4">
+                                <strong>Date de Naissance:</strong><br>
+                                <%= demandeur.getDateNaissance() !=null ? sdfDate.format(demandeur.getDateNaissance()) : "-"
+                                    %>
+                            </div>
+                            <div class="col-md-4">
+                                <strong>Nationalite:</strong><br>
+                                <%= demandeur.getNationalite() !=null ?
+                                    demandeur.getNationalite().getLibelle() : "-" %>
+                            </div>
+                            <div class="col-md-4">
+                                <strong>Situation Familiale:</strong><br>
+                                <%= demandeur.getSituationFamiliale() !=null ?
+                                    demandeur.getSituationFamiliale().getLibelle() : "-" %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <% } %>
 
         <hr>
 

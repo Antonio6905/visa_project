@@ -79,7 +79,7 @@
                 <input class="form-control me-2" type="search" name="q" placeholder="Rechercher...">
                 <button class="btn btn-outline-light" type="submit">
                     <i class="bi bi-search"></i>
-                </button>a
+                </button>
             </form>
         </div>
     </div>

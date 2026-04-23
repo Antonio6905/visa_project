@@ -1,5 +1,21 @@
 package com.visa.example.service;
 
+import java.sql.Date;
+import java.text.Normalizer;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.visa.example.dto.NouveauTitreForm;
 import com.visa.example.entity.Demande;
 import com.visa.example.entity.DemandePiece;
@@ -12,6 +28,7 @@ import com.visa.example.entity.SituationFamiliale;
 import com.visa.example.entity.StatutDemande;
 import com.visa.example.entity.TypeDemande;
 import com.visa.example.entity.TypeVisa;
+import com.visa.example.entity.VisaTransformable;
 import com.visa.example.repository.DemandePieceRepository;
 import com.visa.example.repository.DemandeRepository;
 import com.visa.example.repository.DemandeurRepository;
@@ -23,23 +40,7 @@ import com.visa.example.repository.SituationFamilialeRepository;
 import com.visa.example.repository.StatutDemandeRepository;
 import com.visa.example.repository.TypeDemandeRepository;
 import com.visa.example.repository.TypeVisaRepository;
-import com.visa.example.entity.VisaTransformable;
 import com.visa.example.repository.VisaTransformableRepository;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.sql.Date;
-import java.text.Normalizer;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
 
 @Service
 public class DemandeNouveauTitreService {
@@ -305,43 +306,29 @@ public class DemandeNouveauTitreService {
     }
 
     private TypeDemande resolveTypeDemandeNouveauTitre() {
-        List<TypeDemande> typeDemandes = typeDemandeRepository.findAll();
+        String typeNouveauTitre = TYPE_DEMANDE_CODES.get(0);
 
-        for (String code : TYPE_DEMANDE_CODES) {
-            TypeDemande byCode = typeDemandeRepository.findByCode(code);
-            if (byCode != null) {
-                return byCode;
-            }
+        TypeDemande createStatut = typeDemandeRepository.findByCode(typeNouveauTitre);
+        if (createStatut != null) {
+            return createStatut;
+        }
+        else {
+            throw new IllegalArgumentException("Aucun type de demande configure pour 'nouveau titre' (ou renouvellement).");
         }
 
-        for (TypeDemande typeDemande : typeDemandes) {
-            String libelle = safeLower(typeDemande.getLibelle());
-            if (libelle.contains("nouveau") || libelle.contains("renouvellement")) {
-                return typeDemande;
-            }
-        }
-
-        throw new IllegalArgumentException("Aucun type de demande configure pour 'nouveau titre' (ou renouvellement).");
     }
 
     private StatutDemande resolveStatutCree() {
-        List<StatutDemande> statuts = statutDemandeRepository.findAll();
+        String createCode = STATUT_CODES.get(0);
 
-        for (String code : STATUT_CODES) {
-            StatutDemande byCode = statutDemandeRepository.findByCode(code);
-            if (byCode != null) {
-                return byCode;
-            }
+        StatutDemande createStatut = statutDemandeRepository.findByCode(createCode);
+        if (createStatut != null) {
+            return createStatut;
+        }
+        else {
+            throw new IllegalArgumentException("Aucun statut 'cree' n'est configure dans statut_demande.");
         }
 
-        for (StatutDemande statut : statuts) {
-            String libelle = safeLower(statut.getLibelle());
-            if (libelle.contains("cree") || libelle.contains("creation")) {
-                return statut;
-            }
-        }
-
-        throw new IllegalArgumentException("Aucun statut 'cree' n'est configure dans statut_demande.");
     }
 
     private Date toSqlDate(java.time.LocalDate value) {
