@@ -108,6 +108,12 @@
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a class="nav-link" href="/visa-transformable/form">
+                        <i class="bi bi-file-earmark-text me-1"></i>valala mangotraka
+                    </a>
+                </li>
+
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button"
                        data-bs-toggle="dropdown">
