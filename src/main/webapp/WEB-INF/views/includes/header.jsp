@@ -69,6 +69,11 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="${pageContext.request.contextPath}/demandes/duplicata-transfert?type=DUP">
+                        Duplicata / Transfert
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="${pageContext.request.contextPath}/demandes">
                         <i class="bi bi-list-ul me-1"></i>Liste Demandes
                     </a>

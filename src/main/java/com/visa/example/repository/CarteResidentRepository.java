@@ -1,4 +1,3 @@
-// CarteResidentRepository.java
 package com.visa.example.repository;
 
 import com.visa.example.entity.CarteResident;
@@ -7,8 +6,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CarteResidentRepository extends JpaRepository<CarteResident, Long> {
-    
+
+    /**
+     * Recherche une carte résident par son numéro unique.
+     */
     CarteResident findByNumeroCarteResident(String numeroCarteResident);
-    
-    CarteResident findByDemandeId(Long demandeId);
 }
