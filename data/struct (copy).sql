@@ -94,6 +94,22 @@ CREATE TABLE demande_piece (
     PRIMARY KEY (id_demande, id_piece)
 );
 
+-- =====================================================================
+-- Migration : ajout de la colonne chemin_fichier dans demande_piece
+-- À exécuter une seule fois sur la base existante
+-- =====================================================================
+
+ALTER TABLE demande_piece
+    ADD COLUMN IF NOT EXISTS chemin_fichier VARCHAR(500) DEFAULT NULL;
+
+COMMENT ON COLUMN demande_piece.chemin_fichier
+    IS 'Chemin relatif du fichier PDF uploadé pour cette pièce justificative. NULL si pas encore uploadé.';
+
+-- Index utile pour retrouver rapidement les pièces sans fichier d''une demande
+CREATE INDEX IF NOT EXISTS idx_demande_piece_fichier
+    ON demande_piece(id_demande)
+    WHERE chemin_fichier IS NULL;
+
 CREATE TABLE administrateur (
     id SERIAL PRIMARY KEY,
     nom VARCHAR(100) NOT NULL,
