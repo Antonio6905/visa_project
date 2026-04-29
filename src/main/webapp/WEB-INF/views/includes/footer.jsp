@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-md-6">
                     <span class="text-muted">
-                        <i class="bi bi-c-circle"></i> 2024 Gestion Cinéma - Tous droits réservés
+                        <i class="bi bi-c-circle"></i> 2024 Gestion visa - Tous droits réservés
                     </span>
             </div>
             <div class="col-md-6 text-end">

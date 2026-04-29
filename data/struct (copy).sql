@@ -1,5 +1,12 @@
 -- Création des tables
 
+-- reset table
+DELETE FROM demande_piece;
+DELETE FROM demande;
+DELETE FROM visa_transformable;
+DELETE FROM passeport;
+DELETE FROM demandeur;
+
 CREATE TABLE situation_familiale (
     id SERIAL PRIMARY KEY,
     libelle VARCHAR(100) NOT NULL
@@ -37,7 +44,6 @@ CREATE TABLE visa_transformable (
     numero VARCHAR(50) NOT NULL,
     date_entree_territoire DATE NOT NULL,
     lieu_entree_territoire VARCHAR(200) NOT NULL,
-    numero_visa_transformable VARCHAR(50) NOT NULL,
     date_sortie_territoire DATE
 );
 

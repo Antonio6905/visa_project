@@ -3,14 +3,14 @@
     String pageTitle = (String) request.getAttribute("pageTitle");
     String pageIcon = (String) request.getAttribute("pageIcon");
 
-    if (pageTitle == null) pageTitle = "Gestion Cinéma";
+    if (pageTitle == null) pageTitle = "Gestion visa";
 %>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= pageTitle %> - Gestion Cinéma</title>
+    <title><%= pageTitle %> - Gestion visa</title>
 
     <!-- Bootstrap 5 CSS CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -51,7 +51,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container">
         <a class="navbar-brand" href="/">
-            <i class="bi bi-camera-reels me-2"></i>Gestion Cinéma
+            <i class="bi bi-camera-reels me-2"></i>Gestion visa
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
@@ -64,67 +64,14 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="${pageContext.request.contextPath}/dashboard/publicite">
-                        <i class="fas fa-chart-bar"></i> Dashboard Pub
+                    <a class="nav-link" href="${pageContext.request.contextPath}/demandes/nouveau-titre">
+                        <i class="bi bi-file-earmark-plus me-1"></i>Demande Nouveau Titre
                     </a>
                 </li>
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="filmsDropdown" role="button"
-                       data-bs-toggle="dropdown">
-                        <i class="bi bi-film me-1"></i>Films
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="/films">Liste des films</a></li>
-                        <li><a class="dropdown-item" href="/films/new">Nouveau film</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="/genres">Genres</a></li>
-                        <li><a class="dropdown-item" href="/acteurs">Acteurs</a></li>
-                    </ul>
-                </li>
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="seancesDropdown" role="button"
-                       data-bs-toggle="dropdown">
-                        <i class="bi bi-calendar-event me-1"></i>Séances
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="/seances">Séances programmées</a></li>
-                        <li><a class="dropdown-item" href="/seances/new">Nouvelle séance</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="/salles">Salles</a></li>
-                    </ul>
-                </li>
-
                 <li class="nav-item">
-                    <a class="nav-link" href="/billets">
-                        <i class="bi bi-ticket me-1"></i>Vente de billets
+                    <a class="nav-link" href="${pageContext.request.contextPath}/demandes">
+                        <i class="bi bi-list-ul me-1"></i>Liste Demandes
                     </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="/salles">
-                        <i class="bi bi-ticket me-1"></i>Les salles
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="/visa-transformable/form">
-                        <i class="bi bi-file-earmark-text me-1"></i>valala mangotraka
-                    </a>
-                </li>
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button"
-                       data-bs-toggle="dropdown">
-                        <i class="bi bi-gear me-1"></i>Administration
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="/salles">Salles</a></li>
-                        <li><a class="dropdown-item" href="/clients">Clients</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="/statistiques">Statistiques</a></li>
-                    </ul>
                 </li>
             </ul>
 
