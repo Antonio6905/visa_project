@@ -351,4 +351,8 @@ public class DemandeNouveauTitreService {
                 .replaceAll("\\p{M}+", "");
         return normalized.toLowerCase(Locale.ROOT);
     }
+
+    public List<DemandePiece> getDemandePiecesParDemande(Long demandeId) {
+        return demandePieceRepository.findByDemandeId(demandeId);
+    }
 }
