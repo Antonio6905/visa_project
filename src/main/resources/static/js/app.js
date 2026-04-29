@@ -1,4 +1,4 @@
-// Scripts personnalisés pour l'application cinéma
+// Scripts personnalisés pour l'application visa
 
 $(document).ready(function() {
     // Auto-dismiss des alertes après 5 secondes
