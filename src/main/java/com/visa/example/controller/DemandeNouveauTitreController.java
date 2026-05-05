@@ -234,12 +234,12 @@ public class DemandeNouveauTitreController {
             jakarta.servlet.http.HttpServletRequest request) {
         try {
             // Construire l'URL complète vers la page de détail
-            String baseUrl = request.getScheme() + "://" + request.getServerName();
-            if ((request.getScheme().equals("http") && request.getServerPort() != 80) ||
-                    (request.getScheme().equals("https") && request.getServerPort() != 443)) {
-                baseUrl += ":" + request.getServerPort();
-            }
-            String detailUrl = baseUrl + request.getContextPath() + "/demandes/" + demandeId;
+//            String baseUrl = request.getScheme() + "://" + request.getServerName();
+//            if ((request.getScheme().equals("http") && request.getServerPort() != 80) ||
+//                    (request.getScheme().equals("https") && request.getServerPort() != 443)) {
+//                baseUrl += ":" + request.getServerPort();
+//            }
+            String detailUrl =  "http://localhost:5173/"  + "demandes/" + demandeId;
 
             // Générer le QR code
             String qrCodeDataUri = qrCodeService.generateQRCodeDataURI(detailUrl);
