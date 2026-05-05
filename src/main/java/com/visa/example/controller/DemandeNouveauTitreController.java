@@ -8,6 +8,7 @@ import com.visa.example.entity.PieceJustificative;
 import com.visa.example.service.DemandeNouveauTitreService;
 import com.visa.example.service.DemandeStatutService;
 import com.visa.example.service.FileStorageService;
+import com.visa.example.service.QRCodeService;
 import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -27,14 +28,17 @@ public class DemandeNouveauTitreController {
     private final DemandeNouveauTitreService demandeNouveauTitreService;
     private final DemandeStatutService       demandeStatutService;
     private final FileStorageService         fileStorageService;
+    private final QRCodeService              qrCodeService;
 
     public DemandeNouveauTitreController(
             DemandeNouveauTitreService demandeNouveauTitreService,
             DemandeStatutService demandeStatutService,
-            FileStorageService fileStorageService) {
+            FileStorageService fileStorageService,
+            QRCodeService qrCodeService) {
         this.demandeNouveauTitreService = demandeNouveauTitreService;
         this.demandeStatutService       = demandeStatutService;
         this.fileStorageService         = fileStorageService;
+        this.qrCodeService              = qrCodeService;
     }
 
     // ══════════════════════════════════════════════════════
@@ -213,6 +217,40 @@ public class DemandeNouveauTitreController {
     }
 
     // ══════════════════════════════════════════════════════
+    // Génération QR Code
+    // ══════════════════════════════════════════════════════
+
+    /**
+     * Génère un code QR pour une demande spécifique.
+     * Le QR code contient l'URL complète vers la page de détail de la demande.
+     *
+     * @param demandeId l'ID de la demande
+     * @return un objet JSON contenant le QR code en Base64 et l'URL encodée
+     */
+    @GetMapping("/{id}/qrcode")
+    @ResponseBody
+    public QRCodeResponse generateQRCode(
+            @PathVariable("id") Long demandeId,
+            jakarta.servlet.http.HttpServletRequest request) {
+        try {
+            // Construire l'URL complète vers la page de détail
+            String baseUrl = request.getScheme() + "://" + request.getServerName();
+            if ((request.getScheme().equals("http") && request.getServerPort() != 80) ||
+                    (request.getScheme().equals("https") && request.getServerPort() != 443)) {
+                baseUrl += ":" + request.getServerPort();
+            }
+            String detailUrl = baseUrl + request.getContextPath() + "/demandes/" + demandeId;
+
+            // Générer le QR code
+            String qrCodeDataUri = qrCodeService.generateQRCodeDataURI(detailUrl);
+
+            return new QRCodeResponse(qrCodeDataUri, detailUrl);
+        } catch (Exception e) {
+            throw new RuntimeException("Erreur lors de la génération du QR code : " + e.getMessage(), e);
+        }
+    }
+
+    // ══════════════════════════════════════════════════════
     // Helpers privés
     // ══════════════════════════════════════════════════════
 
@@ -286,5 +324,18 @@ public class DemandeNouveauTitreController {
         public String getCode()        { return code; }
         public String getLibelle()     { return libelle; }
         public boolean isObligatoire() { return obligatoire; }
+    }
+
+    public static class QRCodeResponse {
+        private String qrCode;
+        private String url;
+
+        public QRCodeResponse(String qrCode, String url) {
+            this.qrCode = qrCode;
+            this.url = url;
+        }
+
+        public String getQrCode() { return qrCode; }
+        public String getUrl() { return url; }
     }
 }

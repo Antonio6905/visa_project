@@ -24,6 +24,9 @@
     <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
         <h4 class="mb-0">Detail demande #<%= demande.getId() %></h4>
         <div>
+            <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#qrCodeModal" id="showQRCodeBtn" title="Afficher le code QR">
+                <i class="bi bi-qr-code"></i> QR Code
+            </button>
             <a href="${pageContext.request.contextPath}/demandes" class="btn btn-light btn-sm">Retour liste</a>
             <a href="${pageContext.request.contextPath}/demandes/<%= demande.getId() %>/edit" class="btn btn-warning btn-sm">Modifier</a>
         </div>
@@ -130,3 +133,67 @@
         <% } %>
     </div>
 </div>
+
+<!-- Modal pour afficher le QR Code -->
+<div class="modal fade" id="qrCodeModal" tabindex="-1" aria-labelledby="qrCodeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="qrCodeModalLabel">
+                    <i class="bi bi-qr-code"></i> Code QR - Demande #<%= demande.getId() %>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+            <div class="modal-body text-center">
+                <div id="qrCodeContainer" class="mb-3">
+                    <img id="qrCodeImage" src="" alt="QR Code" style="max-width: 300px; width: 100%;">
+                </div>
+                <div id="urlContainer" class="alert alert-info">
+                    <small><strong>URL:</strong></small><br>
+                    <small id="detailUrl" style="word-break: break-all;"></small>
+                </div>
+                <button type="button" class="btn btn-primary btn-sm" id="downloadQRCodeBtn">
+                    <i class="bi bi-download"></i> Télécharger
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const demandeId = <%= demande.getId() %>;
+    const contextPath = "${pageContext.request.contextPath}";
+    
+    // Générer le QR code quand le modal est ouvert
+    document.getElementById('qrCodeModal').addEventListener('show.bs.modal', function() {
+        generateQRCode(demandeId, contextPath);
+    });
+    
+    // Télécharger le QR code
+    document.getElementById('downloadQRCodeBtn').addEventListener('click', function() {
+        const qrCodeImage = document.getElementById('qrCodeImage');
+        const link = document.createElement('a');
+        link.href = qrCodeImage.src;
+        link.download = 'qrcode-demande-' + demandeId + '.png';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    });
+});
+
+function generateQRCode(demandeId, contextPath) {
+    fetch(contextPath + '/demandes/' + demandeId + '/qrcode')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('qrCodeImage').src = data.qrCode;
+            document.getElementById('detailUrl').textContent = data.url;
+            console.log('QR code généré avec succès');
+        })
+        .catch(error => {
+            console.error('Erreur lors de la génération du QR code:', error);
+            document.getElementById('qrCodeContainer').innerHTML = 
+                '<div class="alert alert-danger">Erreur lors de la génération du QR code</div>';
+        });
+}
+</script>
