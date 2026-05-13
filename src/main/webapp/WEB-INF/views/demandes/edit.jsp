@@ -277,8 +277,9 @@
                 <div class="col-12">
                     <small class="text-muted">
                         <i class="bi bi-info-circle me-1"></i>
-                        Le passage au statut <strong>SCAN</strong> n'est possible que si toutes les pièces
-                        obligatoires ont été uploadées.
+                        Le passage au statut <strong>SCAN</strong> ou <strong>VALIDE</strong> n'est possible
+                        que si toutes les pièces obligatoires ont été uploadées et si la photo + la signature
+                        sont enregistrées.
                     </small>
                 </div>
             </form>

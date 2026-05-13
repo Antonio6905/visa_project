@@ -1,0 +1,10 @@
+- Sprint 5:
+	- Intégration Webcam dans demande-search 
+    
+
+	- Ajouter etat avant scan_termine:
+		- Photo et signature terminées (PHOTO_TERMINEE)
+	- Attacher la photo et la signature a la demande visible dans la fiche de la demande
+	- Si photo ou signature absents, la demande ne peut pas passer à l'étape suivante (SCAN_TERMINE)
+	- Alaina sary le olona amle webcam de asaina manao sonia am pad
+	- Au moment de l'export de la carte résident on y met la photo et la signature (optionnel)

@@ -1,12 +1,19 @@
 package com.visa.example.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
+
+        @Value("${app.image.dir:demande-search/image}")
+        private String imageDir;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -30,6 +37,11 @@ public class WebConfig implements WebMvcConfigurer {
 
         registry.addResourceHandler("/fonts/**")
                 .addResourceLocations("classpath:/static/fonts/")
+                .setCachePeriod(31536000);
+
+        Path imagePath = Paths.get(imageDir).toAbsolutePath().normalize();
+        registry.addResourceHandler("/demande-search/image/**")
+                .addResourceLocations(imagePath.toUri().toString())
                 .setCachePeriod(31536000);
     }
 
