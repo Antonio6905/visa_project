@@ -9,6 +9,7 @@ import com.visa.example.service.DemandeNouveauTitreService;
 import com.visa.example.service.DemandeStatutService;
 import com.visa.example.service.FileStorageService;
 import com.visa.example.service.QRCodeService;
+import com.visa.example.service.SignatureImageService;
 import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -29,16 +30,19 @@ public class DemandeNouveauTitreController {
     private final DemandeStatutService       demandeStatutService;
     private final FileStorageService         fileStorageService;
     private final QRCodeService              qrCodeService;
+    private final SignatureImageService      signatureImageService;
 
     public DemandeNouveauTitreController(
             DemandeNouveauTitreService demandeNouveauTitreService,
             DemandeStatutService demandeStatutService,
             FileStorageService fileStorageService,
-            QRCodeService qrCodeService) {
+            QRCodeService qrCodeService,
+            SignatureImageService signatureImageService) {
         this.demandeNouveauTitreService = demandeNouveauTitreService;
         this.demandeStatutService       = demandeStatutService;
         this.fileStorageService         = fileStorageService;
         this.qrCodeService              = qrCodeService;
+        this.signatureImageService      = signatureImageService;
     }
 
     // ══════════════════════════════════════════════════════
@@ -67,6 +71,7 @@ public class DemandeNouveauTitreController {
             model.addAttribute("pageTitle", "Détail Demande #" + demandeId);
             model.addAttribute("content", "demandes/detail.jsp");
             model.addAttribute("demande", demande);
+                model.addAttribute("signatureImage", signatureImageService.getByDemandeId(demandeId));
             model.addAttribute("demandePieces",
                     demandeNouveauTitreService.getDemandePiecesParDemande(demandeId));
             return "layout";

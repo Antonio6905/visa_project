@@ -1,4 +1,6 @@
 import { useState, useRef, useEffect } from "react";
+import CameraCapture from "./photo";
+import SignatureMouse from "./ecriture";
 
 const API_BASE = "http://localhost:8000/api";
 
@@ -127,6 +129,10 @@ export default function DemandeSearch() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [searchMode, setSearchMode] = useState(null); // "id" | "passport"
+    const [selectedDemandeId, setSelectedDemandeId] = useState("");
+    const [photoData, setPhotoData] = useState(null);
+    const [signatureData, setSignatureData] = useState(null);
+    const [uploadState, setUploadState] = useState({ loading: false, error: null, success: null });
     const inputRef = useRef(null);
 
     // Lancer la recherche automatiquement si un paramètre est présent dans l'URL
@@ -134,6 +140,15 @@ export default function DemandeSearch() {
         if (query) handleSearch(query);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    useEffect(() => {
+        if (!results || results.length === 0) return;
+        setSelectedDemandeId((current) => {
+            if (current) return current;
+            const preferred = highlightedId ?? results[0].id;
+            return preferred ? String(preferred) : "";
+        });
+    }, [results, highlightedId]);
 
     const parseQuery = (q) => {
         const trimmed = q.trim().toUpperCase();
@@ -178,6 +193,55 @@ export default function DemandeSearch() {
 
     const handleKeyDown = (e) => {
         if (e.key === "Enter") handleSearch();
+    };
+
+    const handleSelectDemandeId = (value) => {
+        setSelectedDemandeId(value);
+        setUploadState({ loading: false, error: null, success: null });
+    };
+
+    const handleSaveSignatureImage = async (e) => {
+        e.preventDefault();
+        setUploadState({ loading: false, error: null, success: null });
+
+        const demandeId = Number(selectedDemandeId);
+        if (!demandeId || Number.isNaN(demandeId)) {
+            setUploadState({ loading: false, error: "Veuillez saisir un ID de demande valide.", success: null });
+            return;
+        }
+        if (!photoData || !signatureData) {
+            setUploadState({
+                loading: false,
+                error: "La photo et la signature doivent être validées avant l'enregistrement.",
+                success: null,
+            });
+            return;
+        }
+
+        setUploadState({ loading: true, error: null, success: null });
+        try {
+            const res = await fetch(`${API_BASE}/demandes/${demandeId}/signature-image`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    imageData: photoData,
+                    signatureData: signatureData,
+                }),
+            });
+
+            const data = await res.json();
+            if (!res.ok) {
+                throw new Error(data.message || `Erreur ${res.status}`);
+            }
+
+            setUploadState({
+                loading: false,
+                error: null,
+                success: "Photo et signature enregistrées avec succès.",
+            });
+        } catch (err) {
+            setUploadState({ loading: false, error: err.message, success: null });
+        }
     };
 
     const hint = (() => {
@@ -279,6 +343,110 @@ export default function DemandeSearch() {
                         <span><strong style={{ color: "#1A56DB" }}>DEMANDE-{"{id}"}</strong> → toutes les demandes du même demandeur (focus sur celle recherchée)</span>
                         <span><strong style={{ color: "#1A56DB" }}>{"{num_passeport}"}</strong> → toutes les demandes liées au passeport, ordre chronologique</span>
                     </div>
+                </div>
+
+                {/* Photo + signature */}
+                <div style={{
+                    background: "#fff", borderRadius: 16, boxShadow: "0 4px 32px rgba(26,86,219,0.08)",
+                    padding: "32px", marginBottom: 32,
+                }}>
+                    <div style={{ fontWeight: 700, color: "#1E293B", fontSize: "1rem", marginBottom: 6 }}>
+                        Photo et signature
+                    </div>
+                    <div style={{ fontSize: "0.85rem", color: "#64748B", marginBottom: 18 }}>
+                        La demande n'est valide que si la photo et la signature sont enregistrées.
+                    </div>
+
+                    <form onSubmit={handleSaveSignatureImage}>
+                        <label style={{
+                            display: "block", fontSize: "0.8rem", fontWeight: 700, color: "#64748B",
+                            letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8,
+                        }}>
+                            ID de la demande
+                        </label>
+                        <input
+                            list="demande-id-options"
+                            value={selectedDemandeId}
+                            onChange={(e) => handleSelectDemandeId(e.target.value)}
+                            placeholder="Ex: 42"
+                            style={{
+                                width: "100%", padding: "12px 14px", fontSize: "0.95rem",
+                                border: "2px solid #E2E8F0", borderRadius: 10, outline: "none",
+                                background: "#F8FAFC", color: "#1E293B", fontFamily: "inherit",
+                                boxSizing: "border-box",
+                            }}
+                        />
+                        <datalist id="demande-id-options">
+                            {results && results.map((d) => (
+                                <option key={d.id} value={d.id}>
+                                    {d.nomDemandeur ? `${d.id} - ${d.nomDemandeur}` : d.id}
+                                </option>
+                            ))}
+                        </datalist>
+
+                        <div style={{
+                            display: "grid",
+                            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+                            gap: 20,
+                            marginTop: 20,
+                        }}>
+                            <div style={{ background: "#F8FAFC", borderRadius: 12, padding: 16 }}>
+                                <CameraCapture onValidate={setPhotoData} />
+                            </div>
+                            <div style={{ background: "#F8FAFC", borderRadius: 12, padding: 16 }}>
+                                <SignatureMouse onValidate={setSignatureData} />
+                            </div>
+                        </div>
+
+                        <div style={{
+                            marginTop: 20, display: "flex", justifyContent: "space-between",
+                            alignItems: "center", flexWrap: "wrap", gap: 12,
+                        }}>
+                            <div style={{ fontSize: "0.78rem", color: "#64748B" }}>
+                                Validez la photo et la signature avant d'enregistrer.
+                            </div>
+                            <button
+                                type="submit"
+                                disabled={!selectedDemandeId || !photoData || !signatureData || uploadState.loading}
+                                style={{
+                                    background: (!selectedDemandeId || !photoData || !signatureData || uploadState.loading)
+                                        ? "#CBD5E1"
+                                        : "linear-gradient(135deg, #1A56DB, #1A3A8F)",
+                                    color: "#fff", border: "none", borderRadius: 10,
+                                    padding: "10px 22px", fontWeight: 700, fontSize: "0.9rem",
+                                    cursor: (!selectedDemandeId || !photoData || !signatureData || uploadState.loading)
+                                        ? "not-allowed"
+                                        : "pointer",
+                                    whiteSpace: "nowrap",
+                                    boxShadow: (!selectedDemandeId || !photoData || !signatureData || uploadState.loading)
+                                        ? "none"
+                                        : "0 2px 12px rgba(26,86,219,0.25)",
+                                }}
+                            >
+                                {uploadState.loading ? "Enregistrement..." : "Enregistrer photo + signature"}
+                            </button>
+                        </div>
+
+                        {uploadState.error && (
+                            <div style={{
+                                marginTop: 12, background: "#FEF2F2", border: "1px solid #FECACA",
+                                borderRadius: 10, padding: "10px 14px", color: "#DC2626",
+                                fontSize: "0.85rem",
+                            }}>
+                                {uploadState.error}
+                            </div>
+                        )}
+
+                        {uploadState.success && (
+                            <div style={{
+                                marginTop: 12, background: "#ECFDF3", border: "1px solid #BBF7D0",
+                                borderRadius: 10, padding: "10px 14px", color: "#15803D",
+                                fontSize: "0.85rem",
+                            }}>
+                                {uploadState.success}
+                            </div>
+                        )}
+                    </form>
                 </div>
 
                 {/* Results */}

@@ -29,16 +29,19 @@ public class DemandeStatutService {
     private final DemandePieceRepository   demandePieceRepository;
     private final StatutDemandeRepository  statutDemandeRepository;
     private final FileStorageService       fileStorageService;
+    private final SignatureImageService    signatureImageService;
 
     public DemandeStatutService(
             DemandeRepository demandeRepository,
             DemandePieceRepository demandePieceRepository,
             StatutDemandeRepository statutDemandeRepository,
-            FileStorageService fileStorageService) {
+            FileStorageService fileStorageService,
+            SignatureImageService signatureImageService) {
         this.demandeRepository       = demandeRepository;
         this.demandePieceRepository  = demandePieceRepository;
         this.statutDemandeRepository = statutDemandeRepository;
         this.fileStorageService      = fileStorageService;
+        this.signatureImageService   = signatureImageService;
     }
 
     // ══════════════════════════════════════════════════════
@@ -123,6 +126,14 @@ public class DemandeStatutService {
                     msg.append(manquantes.get(i).getPiece().getLibelle());
                 }
                 throw new IllegalArgumentException(msg.toString());
+            }
+        }
+
+        if (CODE_SCAN.equals(nouveauStatutCode) || CODE_VALIDE.equals(nouveauStatutCode)) {
+            if (!signatureImageService.hasPhotoAndSignature(demandeId)) {
+                throw new IllegalArgumentException(
+                        "Impossible de passer au statut " + nouveauStatutCode
+                        + " : la photo et la signature sont obligatoires.");
             }
         }
 

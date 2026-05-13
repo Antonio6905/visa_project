@@ -7,6 +7,7 @@
 <%
     Demande demande = (Demande) request.getAttribute("demande");
     List<DemandePiece> pieces = (List<DemandePiece>) request.getAttribute("demandePieces");
+    SignatureImage signatureImage = (SignatureImage) request.getAttribute("signatureImage");
     if (pieces == null) {
         pieces = Collections.emptyList();
     }
@@ -142,6 +143,49 @@
             </li>
             <% } %>
         </ul>
+        <% } %>
+
+        <hr>
+
+        <h5>Photo et signature</h5>
+        <% boolean hasPhoto = signatureImage != null
+                && signatureImage.getUrlImage() != null
+                && !signatureImage.getUrlImage().isBlank();
+           boolean hasSignature = signatureImage != null
+                && signatureImage.getUrlSignature() != null
+                && !signatureImage.getUrlSignature().isBlank();
+        %>
+        <% if (!hasPhoto && !hasSignature) { %>
+        <div class="alert alert-secondary mb-0">Aucune photo ou signature disponible.</div>
+        <% } else { %>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="card border">
+                    <div class="card-body text-center">
+                        <div class="fw-semibold mb-2">Photo</div>
+                        <% if (hasPhoto) { %>
+                        <img src="<%= signatureImage.getUrlImage() %>" alt="Photo"
+                             style="max-width: 100%; border-radius: 8px;">
+                        <% } else { %>
+                        <div class="text-muted">Non disponible</div>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card border">
+                    <div class="card-body text-center">
+                        <div class="fw-semibold mb-2">Signature</div>
+                        <% if (hasSignature) { %>
+                        <img src="<%= signatureImage.getUrlSignature() %>" alt="Signature"
+                             style="max-width: 100%; border-radius: 8px;">
+                        <% } else { %>
+                        <div class="text-muted">Non disponible</div>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
         <% } %>
 
     </div>

@@ -30,6 +30,8 @@ CREATE TABLE demandeur (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+
+
 CREATE TABLE passeport (
     id SERIAL PRIMARY KEY,
     numero VARCHAR(50) NOT NULL UNIQUE,
@@ -86,6 +88,12 @@ CREATE TABLE demande (
     date_demande TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     id_type_visa INTEGER NOT NULL REFERENCES type_visa(id),
     id_type_demande INTEGER NOT NULL REFERENCES type_demande(id)
+);
+
+CREATE TABLE signature_image (
+    id_demande INTEGER PRIMARY KEY REFERENCES demande(id),
+    url_image VARCHAR(500),
+    url_signature VARCHAR(500)
 );
 
 CREATE TABLE demande_piece (
