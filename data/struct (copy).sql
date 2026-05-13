@@ -2,6 +2,8 @@
 
 -- reset table
 DELETE FROM demande_piece;
+DELETE FROM carte_resident;
+DELETE FROM visa;
 DELETE FROM demande;
 DELETE FROM visa_transformable;
 DELETE FROM passeport;

@@ -13,34 +13,12 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import com.visa.example.entity.*;
+import com.visa.example.repository.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.visa.example.dto.NouveauTitreForm;
-import com.visa.example.entity.Demande;
-import com.visa.example.entity.DemandePiece;
-import com.visa.example.entity.Demandeur;
-import com.visa.example.entity.Nationalite;
-import com.visa.example.entity.Passeport;
-import com.visa.example.entity.PieceJustificative;
-import com.visa.example.entity.PieceSpecifiqueTypeVisa;
-import com.visa.example.entity.SituationFamiliale;
-import com.visa.example.entity.StatutDemande;
-import com.visa.example.entity.TypeDemande;
-import com.visa.example.entity.TypeVisa;
-import com.visa.example.entity.VisaTransformable;
-import com.visa.example.repository.DemandePieceRepository;
-import com.visa.example.repository.DemandeRepository;
-import com.visa.example.repository.DemandeurRepository;
-import com.visa.example.repository.NationaliteRepository;
-import com.visa.example.repository.PasseportRepository;
-import com.visa.example.repository.PieceJustificativeRepository;
-import com.visa.example.repository.PieceSpecifiqueTypeVisaRepository;
-import com.visa.example.repository.SituationFamilialeRepository;
-import com.visa.example.repository.StatutDemandeRepository;
-import com.visa.example.repository.TypeDemandeRepository;
-import com.visa.example.repository.TypeVisaRepository;
-import com.visa.example.repository.VisaTransformableRepository;
 
 @Service
 public class DemandeNouveauTitreService {
@@ -60,6 +38,8 @@ public class DemandeNouveauTitreService {
     private final PieceSpecifiqueTypeVisaRepository pieceSpecifiqueTypeVisaRepository;
     private final DemandePieceRepository demandePieceRepository;
     private final VisaTransformableRepository visaTransformableRepository;
+    private final AdministrateurRepository administrateurRepository;
+    private final HistoriqueStatutDemandeRepository  historiqueStatutDemandeRepository;
 
     public DemandeNouveauTitreService(
             DemandeRepository demandeRepository,
@@ -73,7 +53,7 @@ public class DemandeNouveauTitreService {
             PieceJustificativeRepository pieceJustificativeRepository,
             PieceSpecifiqueTypeVisaRepository pieceSpecifiqueTypeVisaRepository,
             DemandePieceRepository demandePieceRepository,
-            VisaTransformableRepository visaTransformableRepository
+            VisaTransformableRepository visaTransformableRepository, AdministrateurRepository administrateurRepository, HistoriqueStatutDemandeRepository historiqueStatutDemandeRepository
     ) {
         this.demandeRepository = demandeRepository;
         this.demandeurRepository = demandeurRepository;
@@ -87,6 +67,8 @@ public class DemandeNouveauTitreService {
         this.pieceSpecifiqueTypeVisaRepository = pieceSpecifiqueTypeVisaRepository;
         this.demandePieceRepository = demandePieceRepository;
         this.visaTransformableRepository = visaTransformableRepository;
+        this.administrateurRepository = administrateurRepository;
+        this.historiqueStatutDemandeRepository = historiqueStatutDemandeRepository;
     }
 
     public List<TypeVisa> getTypeVisas() {
@@ -225,6 +207,16 @@ public class DemandeNouveauTitreService {
         demande.setStatut(statutCree);
         demande.setVisaTransformable(visaTransformable);
         Demande demandeSauvegardee = demandeRepository.save(demande);
+
+        HistoriqueStatutDemande historique = new HistoriqueStatutDemande();
+        historique.setDemande(demande);
+        historique.setStatutDemande(statutCree);
+        // @PrePersist dans l'entité initialise dateUpdate automatiquement,
+        // mais on le force explicitement pour être explicite.
+        historique.setDateUpdate(new java.util.Date());
+        // Administrateur : on utilise "admin" par défaut (à adapter selon la session)
+        historique.setAdministrateur(administrateurRepository.findByLogin("admin"));
+        historiqueStatutDemandeRepository.save(historique);
 
         savePiecesSelectionnees(demandeSauvegardee, typeVisa.getId(), form.getPieceIds());
 

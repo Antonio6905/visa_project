@@ -14,4 +14,6 @@ public interface HistoriqueStatutDemandeRepository extends JpaRepository<Histori
     List<HistoriqueStatutDemande> findByAdministrateurId(Long administrateurId);
     
     List<HistoriqueStatutDemande> findByStatutDemandeId(Long statutDemandeId);
+
+    List<HistoriqueStatutDemande> findByDemandeId(Long demandeId);
 }

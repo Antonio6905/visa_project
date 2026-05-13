@@ -10,6 +10,8 @@ INSERT INTO nationalite (id, libelle) VALUES
 (3, 'Mauricien'),
 (4, 'Chinois');
 
+INSERT INTO nationalite (id, libelle) VALUES (5, 'Japonais');
+
 INSERT INTO type_visa (id, code, libelle) VALUES
 (1, 'TS', 'Travail'),
 (2, 'INV', 'Investisseur');
@@ -25,6 +27,8 @@ INSERT INTO statut_demande (id, code, libelle) VALUES
 (3, 'VALIDE', 'Validée'),
 (4, 'REFUSE', 'Refusée'),
 (5, 'SCAN', 'Scan termine');
+
+insert into administrateur values(1,'admin@gmail.com','admin','admin123','admin','admin');
 
 INSERT INTO piece_justificative (id, code, libelle, commun, obligatoire) VALUES
 (1, 'PASS', 'Copie du passeport', TRUE, TRUE),

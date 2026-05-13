@@ -42,6 +42,8 @@ public class DuplicataTransfertService {
     private final PieceSpecifiqueTypeVisaRepository pieceSpecifiqueTypeVisaRepository;
     private final DemandePieceRepository     demandePieceRepository;
     private final VisaTransformableRepository visaTransformableRepository;
+    private final AdministrateurRepository administrateurRepository;
+    private final HistoriqueStatutDemandeRepository  historiqueStatutDemandeRepository;
 
     public DuplicataTransfertService(
             CarteResidentRepository carteResidentRepository,
@@ -57,7 +59,7 @@ public class DuplicataTransfertService {
             PieceJustificativeRepository pieceJustificativeRepository,
             PieceSpecifiqueTypeVisaRepository pieceSpecifiqueTypeVisaRepository,
             DemandePieceRepository demandePieceRepository,
-            VisaTransformableRepository visaTransformableRepository
+            VisaTransformableRepository visaTransformableRepository, AdministrateurRepository administrateurRepository, HistoriqueStatutDemandeRepository historiqueStatutDemandeRepository
     ) {
         this.carteResidentRepository         = carteResidentRepository;
         this.visaRepository                  = visaRepository;
@@ -73,6 +75,8 @@ public class DuplicataTransfertService {
         this.pieceSpecifiqueTypeVisaRepository = pieceSpecifiqueTypeVisaRepository;
         this.demandePieceRepository          = demandePieceRepository;
         this.visaTransformableRepository     = visaTransformableRepository;
+        this.administrateurRepository = administrateurRepository;
+        this.historiqueStatutDemandeRepository = historiqueStatutDemandeRepository;
     }
 
     // ══════════════════════════════════════════════════════
@@ -224,6 +228,16 @@ public class DuplicataTransfertService {
         demandeNT.setVisaTransformable(visaTransformable);
         Demande demandeNTSauvegardee = demandeRepository.save(demandeNT);
 
+        HistoriqueStatutDemande historique = new HistoriqueStatutDemande();
+        historique.setDemande(demandeNTSauvegardee);
+        historique.setStatutDemande(statutValide);
+        // @PrePersist dans l'entité initialise dateUpdate automatiquement,
+        // mais on le force explicitement pour être explicite.
+        historique.setDateUpdate(new java.util.Date());
+        // Administrateur : on utilise "admin" par défaut (à adapter selon la session)
+        historique.setAdministrateur(administrateurRepository.findByLogin("admin"));
+        historiqueStatutDemandeRepository.save(historique);
+
         savePiecesSelectionnees(demandeNTSauvegardee, typeVisa.getId(), form.getPieceIds());
 
         // Visa lié à la demande NT
@@ -254,6 +268,16 @@ public class DuplicataTransfertService {
         // Référence le même visa transformable
         demandeDupOuTrf.setVisaTransformable(visaTransformable);
         Demande demandeDupOuTrfSauvegardee = demandeRepository.save(demandeDupOuTrf);
+
+        HistoriqueStatutDemande historique2 = new HistoriqueStatutDemande();
+        historique2.setDemande(demandeDupOuTrfSauvegardee);
+        historique2.setStatutDemande(statutCree);
+        // @PrePersist dans l'entité initialise dateUpdate automatiquement,
+        // mais on le force explicitement pour être explicite.
+        historique2.setDateUpdate(new java.util.Date());
+        // Administrateur : on utilise "admin" par défaut (à adapter selon la session)
+        historique2.setAdministrateur(administrateurRepository.findByLogin("admin"));
+        historiqueStatutDemandeRepository.save(historique2);
 
         savePiecesSelectionnees(demandeDupOuTrfSauvegardee, typeVisa.getId(), form.getPieceIds());
 
